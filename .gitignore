@@ -15,7 +15,6 @@ target/
 
 ### IntelliJ IDEA ###
 .idea
-files
 *.iws
 *.iml
 *.ipr
@@ -30,3 +29,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Project ###
+files/
