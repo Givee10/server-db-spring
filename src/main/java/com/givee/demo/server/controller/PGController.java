@@ -23,6 +23,12 @@ import java.util.List;
 public class PGController implements HasLogger {
 	public static final String APPLICATION_JSON = "application/json;charset=UTF-8";
 
+	/**
+	 * Initialization of database connection, check credentials in requests
+	 * @param auth Basic authorization header from request
+	 * @param database database name
+	 * @return Connection interface
+	 */
 	private Connection initDatabase(String auth, String database) {
 		String[] splitHeader = auth.split(" ");
 		byte[] bytes = Base64.getDecoder().decode(splitHeader[1]);
@@ -52,6 +58,12 @@ public class PGController implements HasLogger {
 		}
 	}
 
+	/**
+	 * Basic SQL request
+	 * @param connection database connection
+	 * @param query SQL query
+	 * @return json with nodes as columns in string format
+	 */
 	private String postSQLRequest(Connection connection, String query) {
 		ObjectMapper objectMapper = BeanUtil.getBean(ObjectMapper.class);
 		ArrayNode arrayNode = objectMapper.createArrayNode();
@@ -76,6 +88,12 @@ public class PGController implements HasLogger {
 		}
 	}
 
+	/**
+	 * Method to check the database credential
+	 * @param auth Basic authorization header from request
+	 * @param database database name
+	 * @return default schema of database, if credentials are ok
+	 */
 	@PostMapping(value = "login", produces = APPLICATION_JSON)
 	@ResponseBody
 	private String doLogin(
@@ -92,6 +110,12 @@ public class PGController implements HasLogger {
 		}
 	}
 
+	/**
+	 * Return all tables from default schema of database
+	 * @param auth Basic authorization header from request
+	 * @param database database name
+	 * @return List of tables with information
+	 */
 	@GetMapping(value = "tables", produces = APPLICATION_JSON)
 	@ResponseBody
 	private List<TableDto> getTables(
@@ -108,6 +132,13 @@ public class PGController implements HasLogger {
 		}
 	}
 
+	/**
+	 * Return all columns from selected table
+	 * @param auth Basic authorization header from request
+	 * @param database database name
+	 * @param tableName selected table name
+	 * @return List of columns with information
+	 */
 	@GetMapping(value = "tables/{tableName}/columns", produces = APPLICATION_JSON)
 	@ResponseBody
 	private List<ColumnDto> getTableColumns(
@@ -126,6 +157,13 @@ public class PGController implements HasLogger {
 		}
 	}
 
+	/**
+	 * Return all rows from selected table
+	 * @param auth Basic authorization header from request
+	 * @param database database name
+	 * @param tableName selected table name
+	 * @return List of rows as json nodes
+	 */
 	@GetMapping(value = "tables/{tableName}/values", produces = APPLICATION_JSON)
 	@ResponseBody
 	private List<ObjectNode> getTableValues(
